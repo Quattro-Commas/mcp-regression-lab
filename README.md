@@ -1,3 +1,8 @@
+[![CI](https://github.com/Quattro-Commas/mcp-regression-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Quattro-Commas/mcp-regression-lab/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Quattro-Commas/mcp-regression-lab/actions/workflows/codeql.yml/badge.svg)](https://github.com/Quattro-Commas/mcp-regression-lab/actions/workflows/codeql.yml)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![Node >=24](https://img.shields.io/badge/node-%3E%3D24-brightgreen.svg)](https://nodejs.org/)
+
 # mcp-regression-lab
 
 Catch MCP releases that silently break agents. Snapshot a remote MCP server's tool contract,
