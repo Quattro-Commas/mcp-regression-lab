@@ -3,3 +3,8 @@ node_modules/
 current.json
 diff.json
 lint.json
+dist/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
