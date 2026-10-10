@@ -16,7 +16,7 @@ format:
 	npm run format
 
 run:
-	node dist/cli.js
+	npx tsx src/cli.ts
 
 demo:
 	npx tsx examples/demo-server.ts

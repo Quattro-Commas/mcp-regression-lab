@@ -20,9 +20,14 @@ export function evaluate(c: GoldenCase, calls: ToolCall[]): Verdict {
   const hit = calls.find((call) => call.name === c.expectTool);
   if (!hit) {
     const chosen = calls.map((call) => call.name).join(', ');
-    return { pass: false, reason: chosen ? `chose ${chosen} instead of ${c.expectTool}` : 'no tool called' };
+    return {
+      pass: false,
+      reason: chosen ? `chose ${chosen} instead of ${c.expectTool}` : 'no tool called',
+    };
   }
-  const missing = (c.requiredArgs ?? []).filter((a) => hit.args?.[a] === undefined || hit.args[a] === '');
+  const missing = (c.requiredArgs ?? []).filter(
+    (a) => hit.args?.[a] === undefined || hit.args[a] === '',
+  );
   if (missing.length) return { pass: false, reason: `missing argument(s): ${missing.join(', ')}` };
   return { pass: true, reason: 'ok' };
 }
@@ -81,7 +86,10 @@ export function openAICompatibleAsk(
     const { toApi, fromApi } = toolNameMap(contract);
     const res = await fetchImpl(`${baseUrl.replace(/\/+$/, '')}/chat/completions`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json', ...(apiKey ? { authorization: `Bearer ${apiKey}` } : {}) },
+      headers: {
+        'content-type': 'application/json',
+        ...(apiKey ? { authorization: `Bearer ${apiKey}` } : {}),
+      },
       signal: AbortSignal.timeout(60_000),
       body: JSON.stringify({
         model,
@@ -100,14 +108,20 @@ export function openAICompatibleAsk(
     if (!res.ok) {
       // Providers sometimes echo the credential back; never let it reach logs or the UI.
       const text = (await res.text()).slice(0, 300);
-      throw new Error(`model endpoint ${res.status}: ${apiKey ? text.split(apiKey).join('***') : text}`);
+      throw new Error(
+        `model endpoint ${res.status}: ${apiKey ? text.split(apiKey).join('***') : text}`,
+      );
     }
     const body = (await res.json()) as {
-      choices?: { message?: { tool_calls?: { function: { name: string; arguments?: string } }[] } }[];
+      choices?: {
+        message?: { tool_calls?: { function: { name: string; arguments?: string } }[] };
+      }[];
     };
     return (body.choices?.[0]?.message?.tool_calls ?? []).map((tc) => ({
       name: fromApi.get(tc.function.name) ?? tc.function.name,
-      args: tc.function.arguments ? (JSON.parse(tc.function.arguments) as Record<string, unknown>) : {},
+      args: tc.function.arguments
+        ? (JSON.parse(tc.function.arguments) as Record<string, unknown>)
+        : {},
     }));
   };
 }
@@ -133,10 +147,17 @@ export async function runGolden(
       }
     }
   };
-  await Promise.all(Array.from({ length: Math.max(1, Math.min(concurrency, tasks.length)) }, worker));
+  await Promise.all(
+    Array.from({ length: Math.max(1, Math.min(concurrency, tasks.length)) }, worker),
+  );
   const results = cases.map((c, ci) => {
     const runs = verdicts[ci];
-    return { id: c.id, expectTool: c.expectTool, passRate: runs.filter((r) => r.pass).length / runs.length, runs };
+    return {
+      id: c.id,
+      expectTool: c.expectTool,
+      passRate: runs.filter((r) => r.pass).length / runs.length,
+      runs,
+    };
   });
   return { model, repeat, ranAt: new Date().toISOString(), cases: results };
 }
@@ -150,5 +171,7 @@ export function goldenRegressions(previous: CaseResult[], current: CaseResult[])
 /** Refuses calls once `deadline` (epoch ms) passes, so a run always fits its time budget. */
 export function withDeadline(ask: Ask, deadline: number): Ask {
   return (contract, prompt) =>
-    Date.now() > deadline ? Promise.reject(new Error('time budget exhausted before this run')) : ask(contract, prompt);
+    Date.now() > deadline
+      ? Promise.reject(new Error('time budget exhausted before this run'))
+      : ask(contract, prompt);
 }
