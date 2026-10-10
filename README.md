@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: BoozeLee/mcp-regression-lab@v1
+      - uses: Quattro-Commas/mcp-regression-lab@v1
         with:
           mcp-url: https://your-mcp-server.example.com/mcp
           baseline: .mcp-contract.json # commit this once via `snapshot`
@@ -74,7 +74,7 @@ comment (`scripts/post-comment.ts`, plain `fetch` against the GitHub REST API �
 **Hosted mode** — approved baseline + golden tests, managed at https://mcp-regression-lab.vercel.app:
 
 ```yaml
-- uses: BoozeLee/mcp-regression-lab@v1
+- uses: Quattro-Commas/mcp-regression-lab@v1
   with:
     api-token: ${{ secrets.MCP_REGRESSION_LAB_TOKEN }} # Settings → API tokens
     server-id: <id from the server's dashboard URL>
@@ -84,8 +84,8 @@ Fails on a breaking change or a golden-test pass-rate drop. Outputs: `breaking-c
 
 ### Version selection
 
-- `BoozeLee/mcp-regression-lab@v1` follows the latest backwards-compatible v1 release.
-- `BoozeLee/mcp-regression-lab@v1.0.0` pins the current synced release (both tags retagged 2026-10 while zero installs predate the sync).
+- `Quattro-Commas/mcp-regression-lab@v1` follows the latest backwards-compatible v1 release.
+- `Quattro-Commas/mcp-regression-lab@v1.0.0` pins the current synced release (both tags retagged 2026-10 while zero installs predate the sync).
 - Pin to a full commit SHA when your organization requires the strongest dependency-integrity
   control; verify the SHA against the matching GitHub release before adoption.
 

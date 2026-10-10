@@ -32,5 +32,9 @@
   "private": true,
   "bin": {
     "mcp-lab": "src/cli.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Quattro-Commas/mcp-regression-lab.git"
   }
 }
