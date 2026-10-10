@@ -1,12 +1,17 @@
 import { type Change, type Contract, lintContract } from './contract.ts';
 import type { GoldenResult } from './golden.ts';
 
-const esc = (s: string): string =>
-  s.replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
+const esc = (s: string): string => s.replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 
-const row = (cells: string[]): string => `<tr>${cells.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`;
+const row = (cells: string[]): string =>
+  `<tr>${cells.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`;
 
-export function renderReport(before: Contract, after: Contract, changes: Change[], golden?: GoldenResult): string {
+export function renderReport(
+  before: Contract,
+  after: Contract,
+  changes: Change[],
+  golden?: GoldenResult,
+): string {
   const breaking = changes.filter((c) => c.severity === 'breaking').length;
   const verdict = breaking ? `${breaking} breaking change(s)` : 'no breaking contract changes';
   const diffRows = changes.length

@@ -24,7 +24,11 @@ function output(path: string | undefined, text: string): void {
 
 function format(changes: Change[], json?: boolean): string {
   if (json) return `${JSON.stringify(changes, null, 2)}\n`;
-  return changes.map((c) => `${c.severity.padEnd(8)} ${c.kind.padEnd(22)} ${c.tool}: ${c.detail}`).join('\n') + '\n';
+  return (
+    changes
+      .map((c) => `${c.severity.padEnd(8)} ${c.kind.padEnd(22)} ${c.tool}: ${c.detail}`)
+      .join('\n') + '\n'
+  );
 }
 
 async function main(): Promise<number> {
@@ -63,7 +67,8 @@ async function main(): Promise<number> {
     case 'golden': {
       if (!a || !b) break;
       const repeat = Number(values.repeat);
-      if (!Number.isInteger(repeat) || repeat < 1) throw new Error('--repeat must be a positive integer');
+      if (!Number.isInteger(repeat) || repeat < 1)
+        throw new Error('--repeat must be a positive integer');
       const result = await runGolden(
         readJson<Contract>(a),
         readJson<GoldenCase[]>(b),
