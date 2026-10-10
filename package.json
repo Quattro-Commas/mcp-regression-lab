@@ -4,9 +4,9 @@
   "description": "Snapshot, diff and regression-test MCP tool contracts; local-model golden tests",
   "scripts": {
     "build": "tsc",
+    "lint": "eslint src/ test/",
     "test": "node --test 'test/*.test.ts'",
     "lab": "node src/cli.ts",
-    "lint": "eslint src/",
     "format": "prettier --write \"src/**/*.ts\""
   },
   "author": "Kiliaan Vanvoorden",

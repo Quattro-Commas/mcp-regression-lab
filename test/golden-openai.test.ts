@@ -17,11 +17,11 @@ const contract = normalize("https://x.test/mcp", [
 // Minimal stand-in for an OpenAI-compatible /chat/completions endpoint.
 async function fakeLLM(
   reply: (
-    body: any,
+    body: unknown,
     headers: Record<string, unknown>,
   ) => { status?: number; json: unknown },
 ) {
-  const seen: { body: any; headers: Record<string, unknown> }[] = [];
+  const seen: { body: unknown; headers: Record<string, unknown> }[] = [];
   const server = createServer((req, res) => {
     let raw = "";
     req.on("data", (c) => (raw += c));

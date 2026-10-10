@@ -5,6 +5,9 @@
 
 # mcp-regression-lab
 
+[![CI](https://github.com/BoozeLee/mcp-regression-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/BoozeLee/mcp-regression-lab/actions/workflows/ci.yml)
+[![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
+
 Catch MCP releases that silently break agents. Snapshot a remote MCP server's tool contract,
 diff it against the last release, lint it for things that hurt tool selection, and re-run
 golden "prompt → expected tool" tests on a **local** model.
@@ -33,6 +36,24 @@ node src/cli.ts report baseline.json current.json --golden golden.json -o report
 
 Golden cases (`examples/cases.json`):
 `{ "id", "prompt", "expectTool", "requiredArgs"?: string[], "forbiddenTools"?: string[] }`
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A[MCP Server] --> B[Snapshot]
+    B --> C[Diff]
+    B --> D[Lint]
+    C --> E[Golden Tests]
+    D --> E
+    E --> F[Report]
+```
+
+1. **Snapshot** — connect to a remote MCP server and capture its tool contract (names, descriptions, argument schemas).
+2. **Diff** — compare two snapshots; exit 1 on breaking changes (removed/renamed tools, type changes, new required args).
+3. **Lint** — heuristic hygiene checks on a single snapshot (thin descriptions, untyped args, injection-like text).
+4. **Golden Tests** — run "prompt → expected tool" cases through a local Ollama model; report pass rates over N runs.
+5. **Report** — combine diff, lint, and golden results into a single HTML report (or PR comment via the GitHub Action).
 
 ## Demo
 
