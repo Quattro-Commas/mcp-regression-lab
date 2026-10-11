@@ -52,6 +52,8 @@ contracts.
 
 ## Demo
 
+![MCP regression lab — diff and lint](docs/demo.svg)
+
 ```sh
 node examples/demo-server.ts v1   # prints a local URL; v2 simulates a careless release
 ```
