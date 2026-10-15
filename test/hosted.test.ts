@@ -148,10 +148,10 @@ test("scrubSecrets removes every occurrence of every known secret", () => {
   const webhook = "https://hooks.example/x1";
   const text = `auth failed: ${token}; retry ${token} via ${webhook}`;
   const out = scrubSecrets(text, [token, webhook, null, undefined, ""]);
-  assert.ok(!out.includes(token), "a secret survived the scrub");
-  assert.ok(!out.includes(webhook), "the webhook URL survived the scrub");
-  assert.ok(out.includes("***") && out.includes("***"), "occurrences not all replaced");
-  assert.ok(out.includes("auth failed:") && out.includes("via "), "context was over-scrubbed");
+  // One exact comparison kills every mutation the substring checks did (a surviving
+  // secret or URL, only the first hit replaced, context over-scrubbed) without a
+  // URL-substring test, which CodeQL reads as incomplete URL sanitization.
+  assert.equal(out, "auth failed: ***; retry *** via ***", "the scrub did not replace exactly every secret");
 });
 
 test("scrubSecrets has no length floor and is a no-op without secrets", () => {
