@@ -16,7 +16,7 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@modelcontextprotocol/client": "^2.2.0",
+    "@modelcontextprotocol/client": "^2.3.0",
     "undici": "^8.11.2",
     "zod": "^4.6.5"
   },
